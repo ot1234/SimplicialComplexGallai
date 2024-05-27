@@ -1,7 +1,6 @@
 from simplicial import *
 from random import Random
 from typing import List
-from sympy import Matrix
 import numpy as np
 import galois
 
@@ -49,7 +48,6 @@ def get_euler_cycle_basis(X: SimplicialComplex):
     """
     # Create matrix with column per triangle and row per edge, a_ij=1 iff i in boundary(j)
     boundaries = X.boundaryOperator(2)
-    print("boundary")
 
     gf2_boundaries = GF2(boundaries)
     gf2_null_basis = GF2.null_space(gf2_boundaries)
@@ -74,7 +72,6 @@ def get_cuts_basis(X: SimplicialComplex):
     cuts_basis = list()
     for edge in get_edges(X):
         coboundary = [tr for tr in get_triangles(X) if edge in X.boundary([tr])]
-        print("coboundary")
         cuts_basis.append(coboundary)
     return cuts_basis
 
@@ -118,7 +115,7 @@ def is_applying_gallai_theorem(X: SimplicialComplex)->bool:
     combined_mat = np.hstack((space_sum_mat,all_triangles_vec))
 
     space_sum_mat = GF2(space_sum_mat)
-    combined_mat = GF2(space_sum_mat)
+    combined_mat = GF2(combined_mat)
     space_sum_rank = len(space_sum_mat.column_space())
     combined_rank = len(combined_mat.column_space())
 
@@ -132,14 +129,14 @@ def is_applying_gallai_theorem(X: SimplicialComplex)->bool:
 ##########################################################################
 
 
-for i in range(1):
-    X = generate_random_complex(16)
+for i in range(100):
+    X = generate_random_complex(10)
     if not is_applying_gallai_theorem(X):
         print(i)
         print(f'edges: {get_edges(X)}')
         print(f'vertices: {get_vertices(X)}')
         print(f'triangles: {get_triangles(X)}')
-        print("Simulation showed")
+        print("Simulation showed a complex not applying the theorem")
         break
 print("finished")
 
